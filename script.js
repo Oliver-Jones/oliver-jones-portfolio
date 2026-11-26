@@ -20,7 +20,7 @@ function renderHero(data) {
 
     el.innerHTML = `
         <div class="hero-photo fade-up">
-            <img src="resources/headshot.jpg" alt="${escapeHtml(data.name)}">
+            <img src="resources/headshot.jpg" alt="${escapeHtml(data.name)}" loading="eager" decoding="async" width="150" height="150">
         </div>
         <div class="hero-text">
             <p class="hero-greeting fade-up">${escapeHtml(data.greeting)}</p>
@@ -44,7 +44,7 @@ function renderAbout(data) {
     const paragraphs = data.about.map(p => `<p>${escapeHtml(p)}</p>`).join('');
     const stats = data.stats.map(s => `
         <div class="stat">
-            <span class="stat-number">${escapeHtml(s.number)}</span>
+            <span class="stat-number" data-target="${escapeHtml(s.number)}">0</span>
             <span class="stat-label">${escapeHtml(s.label)}</span>
         </div>
     `).join('');
@@ -222,10 +222,20 @@ function initNav() {
     const nav = document.getElementById('nav');
     const navToggle = document.getElementById('navToggle');
     const navLinks = document.getElementById('navLinks');
+    const backToTop = document.getElementById('backToTop');
 
     window.addEventListener('scroll', () => {
         nav.classList.toggle('scrolled', window.scrollY > 10);
+        if (backToTop) {
+            backToTop.classList.toggle('visible', window.scrollY > 400);
+        }
     });
+
+    if (backToTop) {
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
 
     navToggle.addEventListener('click', () => {
         navToggle.classList.toggle('open');
@@ -270,6 +280,45 @@ function initAnimations() {
     );
 
     sections.forEach(section => sectionObserver.observe(section));
+
+    const statsSection = document.querySelector('.about-stats');
+    if (statsSection) {
+        const statsObserver = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        statsObserver.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.5 }
+        );
+        statsObserver.observe(statsSection);
+    }
+}
+
+function animateCounters() {
+    document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+        const target = el.getAttribute('data-target');
+        const num = parseInt(target);
+        const suffix = target.replace(/^\d+/, '');
+        const duration = 1500;
+        const steps = 60;
+        const increment = num / steps;
+        let current = 0;
+        let step = 0;
+
+        const timer = setInterval(() => {
+            step++;
+            current = Math.min(Math.round(increment * step), num);
+            el.textContent = current + suffix;
+            if (step >= steps) {
+                el.textContent = target;
+                clearInterval(timer);
+            }
+        }, duration / steps);
+    });
 }
 
 function initContactForm() {

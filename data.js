@@ -263,7 +263,14 @@ const PORTFOLIO_DATA = {
   ],
   "blog": {
     "url": "https://oliverjones-blog.hashnode.dev/",
-    "posts": []
+    "posts": [
+      {
+        "title": "Beyond the Code: From Android Intern to Salesforce Team Lead",
+        "date": "Nov 2026",
+        "summary": "A decade-long journey from Android Developer Intern to Salesforce Team Lead — lessons on development, architecture, integrations, and leadership.",
+        "url": "https://oliverjones-blog.hashnode.dev/beyond-the-code-from-android-intern-to-salesforce-team-lead"
+      }
+    ]
   },
   "contact": {
     "email": "oliverjonesrajkumar@gmail.com",
