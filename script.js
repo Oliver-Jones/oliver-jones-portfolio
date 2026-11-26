@@ -141,7 +141,7 @@ function renderCertifications(data) {
     el.innerHTML = data.certifications.map(cert => `
         <div class="cert-card">
             <div class="cert-icon">${CERT_ICON}</div>
-            <h4>${escapeHtml(cert.name)}</h4>
+            <h3>${escapeHtml(cert.name)}</h3>
             ${cert.issuer ? `<span class="cert-issuer">${escapeHtml(cert.issuer)}</span>` : ''}
             <span class="cert-date">${escapeHtml(cert.date)}</span>
         </div>

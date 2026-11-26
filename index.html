@@ -18,7 +18,7 @@
         <link rel="icon" type="image/svg+xml" href="favicon.svg">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
         <link rel="stylesheet" href="style.css">
         <script type="application/ld+json" id="jsonLd"></script>
     </head>
@@ -58,6 +58,7 @@
             </div>
         </nav>
 
+        <main>
         <section class="hero" id="hero">
             <div class="hero-content" id="heroContent"></div>
             <div class="hero-scroll">
@@ -152,6 +153,8 @@
             </div>
         </section>
 
+        </main>
+
         <footer class="footer">
             <div class="container">
                 <p id="footerText"></p>
@@ -162,7 +165,6 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
         </button>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script src="data.js"></script>
         <script src="resume.js"></script>
         <script src="script.js"></script>
