@@ -335,7 +335,7 @@ ul {
 .hero-greeting {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--color-text);
+    color: var(--color-text-light);
     letter-spacing: 2px;
     text-transform: uppercase;
     margin-bottom: 12px;
@@ -476,10 +476,6 @@ ul {
     border-radius: 2px;
 }
 
-.section-dark .section-title::after {
-    background: var(--color-accent);
-}
-
 /* ========== About ========== */
 
 .about-content p {
@@ -609,7 +605,6 @@ ul {
     background: var(--color-bg);
     border: 3px solid var(--color-accent);
     border-radius: 50%;
-    background: var(--color-bg);
     z-index: 1;
 }
 
@@ -1046,12 +1041,6 @@ ul {
     gap: 16px;
 }
 
-.contact-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-}
-
 .contact-item {
     display: inline-flex;
     align-items: center;
@@ -1217,10 +1206,6 @@ ul {
 
     .education-grid {
         grid-template-columns: 1fr;
-    }
-
-    .contact-links {
-        flex-direction: column;
     }
 
     .contact-item {
