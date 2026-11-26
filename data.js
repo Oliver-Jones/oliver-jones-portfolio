@@ -266,6 +266,7 @@ const PORTFOLIO_DATA = {
   "contact": {
     "email": "oliverjonesrajkumar@gmail.com",
     "phone": "+91 8760074918",
+    "formUrl": "https://formspree.io/f/xdegbvga",
     "links": [
       { "label": "LinkedIn", "url": "https://www.linkedin.com/in/oliver-jones-rajkumar" },
       { "label": "GitHub", "url": "https://github.com/Oliver-Jones" }

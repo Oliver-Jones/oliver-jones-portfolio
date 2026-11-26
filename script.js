@@ -177,13 +177,6 @@ function renderContact(data) {
         </a>`;
     }
 
-    if (data.contact.phone) {
-        const tel = data.contact.phone.replace(/\s/g, '');
-        html += `<a href="tel:${escapeHtml(tel)}" class="contact-item">
-            ${CONTACT_ICONS.phone}<span>${escapeHtml(data.contact.phone)}</span>
-        </a>`;
-    }
-
     if (data.contact.links) {
         data.contact.links.forEach(link => {
             const icon = CONTACT_ICONS[link.label] || CONTACT_ICONS.link;
@@ -282,6 +275,10 @@ function initAnimations() {
 function initContactForm() {
     const form = document.getElementById('contactForm');
     if (!form) return;
+
+    if (PORTFOLIO_DATA.contact.formUrl) {
+        form.action = PORTFOLIO_DATA.contact.formUrl;
+    }
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
