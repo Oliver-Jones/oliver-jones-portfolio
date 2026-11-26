@@ -109,7 +109,7 @@ function renderProjects(data) {
             : data.projects.filter(p => p.tags.includes(filter));
 
         grid.innerHTML = filtered.map(proj => `
-            <div class="project-card fade-up visible">
+            <div class="project-card fade-up">
                 <div class="project-date">${escapeHtml(proj.date)}</div>
                 <h3>${escapeHtml(proj.name)}</h3>
                 <p>${escapeHtml(proj.description)}</p>
@@ -118,6 +118,10 @@ function renderProjects(data) {
                 </div>
             </div>
         `).join('');
+
+        grid.querySelectorAll('.project-card').forEach((card, i) => {
+            setTimeout(() => card.classList.add('visible'), i * 80);
+        });
     }
 
     filtersEl.addEventListener('click', (e) => {
@@ -500,4 +504,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initNav();
     initAnimations();
     initContactForm();
+
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        setTimeout(() => {
+            preloader.classList.add('hidden');
+            preloader.addEventListener('transitionend', () => preloader.remove());
+        }, 1200);
+    }
 });
