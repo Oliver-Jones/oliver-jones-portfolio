@@ -20,7 +20,7 @@ function renderHero(data) {
 
     el.innerHTML = `
         <div class="hero-photo fade-up">
-            <img src="resources/headshot.png" alt="${escapeHtml(data.name)}">
+            <img src="resources/headshot.jpg" alt="${escapeHtml(data.name)}">
         </div>
         <div class="hero-text">
             <p class="hero-greeting fade-up">${escapeHtml(data.greeting)}</p>
@@ -340,7 +340,7 @@ function initSEO(data) {
         "name": data.name,
         "jobTitle": data.title,
         "url": url,
-        "image": url + "resources/headshot.png",
+        "image": url + "resources/headshot.jpg",
         "description": data.heroSummary,
         "sameAs": sameAs,
         "worksFor": {
