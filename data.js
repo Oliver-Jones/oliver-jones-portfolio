@@ -222,6 +222,43 @@ const PORTFOLIO_DATA = {
       "grade": "GPA: 9.2"
     }
   ],
+  "testimonials": [
+    {
+      "quote": "Oliver has been a valued member of the ICA support for many years and now the tax team. We really appreciate his knowledge of the ICA system in its entirety and the ability to program the new, complex processes and troubleshoot the technical issues that come up. It was great to have a team member that was consistent between MFCR and Tax so that the interface knowledge could be bridged between the projects. We have a trust in Oliver that is very comforting.",
+      "name": "Julie Hill",
+      "role": "ICA"
+    },
+    {
+      "quote": "Oliver in ICA project has been consistently performing well. Even in recent UAT change implementation Sprints, he handled most complex stories with ease and accuracy. This exhibits his technical expertise and focus on the details. Whole team is very much impressed.",
+      "name": "Sharmeela Jayaram",
+      "role": "Mastek"
+    },
+    {
+      "quote": "You exhibit a role model behavior for the rest of the organization to follow!",
+      "name": "Krishnadoss Parthasarathy",
+      "role": "Mastek"
+    },
+    {
+      "quote": "Thank you for your hard work on ICA project and helping us successfully go live. You were instrumental on this project in many ways including — being technically strong and supporting team, fixed complex issues within a short time with accuracy, and most complex scenarios were done by you.",
+      "name": "Rahul Rathore",
+      "role": "Mastek"
+    },
+    {
+      "quote": "Oliver, your mentorship meant a lot to us, and you strengthened our Salesforce foundation in the best way!",
+      "name": "Nivetha Jayakumar",
+      "role": "Mastek"
+    },
+    {
+      "quote": "Oliver, it was great working with you on the Wyoming and AZCourts projects. Your contributions and support to the team have been truly appreciated!",
+      "name": "Mythili Kumar",
+      "role": "Mastek"
+    },
+    {
+      "quote": "Thank you for your constant support and guidance. You have always been a great leader and mentor to us.",
+      "name": "Haja Mohideen Mohamed Sadakathulla",
+      "role": "Mastek"
+    }
+  ],
   "contact": {
     "email": "oliverjonesrajkumar@gmail.com",
     "phone": "+91 8760074918",
