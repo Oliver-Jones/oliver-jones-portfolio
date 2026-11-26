@@ -274,6 +274,22 @@ ul {
     letter-spacing: 2px;
     text-transform: uppercase;
     margin-bottom: 12px;
+    min-height: 1.6em;
+}
+
+.typing-cursor {
+    color: var(--color-accent);
+    font-weight: 300;
+    animation: none;
+}
+
+.typing-cursor.blink {
+    animation: cursorBlink 1s step-end infinite;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 
 .hero-name {
@@ -445,11 +461,12 @@ ul {
     border: 1px solid var(--color-border);
     border-radius: 12px;
     padding: 32px;
-    transition: box-shadow 0.2s;
+    transition: box-shadow 0.2s, transform 0.2s;
 }
 
 .skill-category:hover {
     box-shadow: 0 4px 24px var(--color-card-shadow);
+    transform: translateY(-4px);
 }
 
 .skill-category h3 {
@@ -462,25 +479,34 @@ ul {
 .skill-category ul {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 14px;
 }
 
 .skill-category li {
     font-size: 0.9375rem;
     color: var(--color-text-secondary);
-    padding-left: 16px;
-    position: relative;
 }
 
-.skill-category li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 10px;
-    width: 6px;
+.skill-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.skill-bar {
+    width: 100%;
     height: 6px;
+    background: var(--color-border);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.skill-bar-fill {
+    height: 100%;
+    width: 0;
     background: var(--color-accent);
-    border-radius: 50%;
+    border-radius: 3px;
+    transition: width 1s ease;
 }
 
 /* ========== Timeline ========== */
@@ -575,6 +601,42 @@ ul {
 }
 
 /* ========== Projects ========== */
+
+.project-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+}
+
+.filter-btn {
+    padding: 6px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 100px;
+    background: var(--color-card);
+    color: var(--color-text-secondary);
+    font-family: inherit;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.filter-btn.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #ffffff;
+}
+
+.project-tags .active-tag {
+    background: var(--color-accent);
+    color: #ffffff;
+}
 
 .projects-grid {
     display: grid;

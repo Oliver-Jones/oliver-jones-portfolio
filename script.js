@@ -23,7 +23,7 @@ function renderHero(data) {
             <img src="resources/headshot.jpg" alt="${escapeHtml(data.name)}" loading="eager" decoding="async" width="150" height="150">
         </div>
         <div class="hero-text">
-            <p class="hero-greeting fade-up">${escapeHtml(data.greeting)}</p>
+            <p class="hero-greeting fade-up"><span id="typedGreeting"></span><span class="typing-cursor">|</span></p>
             <h1 class="hero-name fade-up">${escapeHtml(data.name)}</h1>
             <h2 class="hero-title fade-up">${escapeHtml(data.title)}</h2>
             <p class="hero-summary fade-up">${escapeHtml(data.heroSummary)}</p>
@@ -58,7 +58,18 @@ function renderSkills(data) {
         <div class="skill-category">
             <h3>${escapeHtml(group.category)}</h3>
             <ul>
-                ${group.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
+                ${group.items.map(item => {
+                    const level = item.level || 90;
+                    const name = typeof item === 'string' ? item : item.name;
+                    return `<li>
+                        <div class="skill-info">
+                            <span>${escapeHtml(name)}</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-bar-fill" data-level="${level}"></div>
+                        </div>
+                    </li>`;
+                }).join('')}
             </ul>
         </div>
     `).join('');
@@ -84,17 +95,41 @@ function renderExperience(data) {
 }
 
 function renderProjects(data) {
-    const el = document.getElementById('projectsGrid');
-    el.innerHTML = data.projects.map(proj => `
-        <div class="project-card fade-up">
-            <div class="project-date">${escapeHtml(proj.date)}</div>
-            <h3>${escapeHtml(proj.name)}</h3>
-            <p>${escapeHtml(proj.description)}</p>
-            <div class="project-tags">
-                ${proj.tags.map(t => `<span>${escapeHtml(t)}</span>`).join('')}
+    const grid = document.getElementById('projectsGrid');
+    const filtersEl = document.getElementById('projectFilters');
+
+    const allTags = [...new Set(data.projects.flatMap(p => p.tags))].sort();
+
+    filtersEl.innerHTML = `<button class="filter-btn active" data-filter="all">All</button>` +
+        allTags.map(tag => `<button class="filter-btn" data-filter="${escapeHtml(tag)}">${escapeHtml(tag)}</button>`).join('');
+
+    function showProjects(filter) {
+        const filtered = filter === 'all'
+            ? data.projects
+            : data.projects.filter(p => p.tags.includes(filter));
+
+        grid.innerHTML = filtered.map(proj => `
+            <div class="project-card fade-up visible">
+                <div class="project-date">${escapeHtml(proj.date)}</div>
+                <h3>${escapeHtml(proj.name)}</h3>
+                <p>${escapeHtml(proj.description)}</p>
+                <div class="project-tags">
+                    ${proj.tags.map(t => `<span class="${t === filter ? 'active-tag' : ''}">${escapeHtml(t)}</span>`).join('')}
+                </div>
             </div>
-        </div>
-    `).join('');
+        `).join('');
+    }
+
+    filtersEl.addEventListener('click', (e) => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+
+        filtersEl.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        showProjects(btn.getAttribute('data-filter'));
+    });
+
+    showProjects('all');
 }
 
 function renderCertifications(data) {
@@ -296,6 +331,26 @@ function initAnimations() {
         );
         statsObserver.observe(statsSection);
     }
+
+    const skillsGrid = document.getElementById('skillsGrid');
+    if (skillsGrid) {
+        const skillsObserver = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        document.querySelectorAll('.skill-bar-fill').forEach((bar, i) => {
+                            setTimeout(() => {
+                                bar.style.width = bar.getAttribute('data-level') + '%';
+                            }, i * 60);
+                        });
+                        skillsObserver.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.3 }
+        );
+        skillsObserver.observe(skillsGrid);
+    }
 }
 
 function animateCounters() {
@@ -366,6 +421,27 @@ function initContactForm() {
     });
 }
 
+function initTypingEffect(text) {
+    const el = document.getElementById('typedGreeting');
+    if (!el) return;
+
+    let i = 0;
+    const speed = 80;
+
+    function type() {
+        if (i < text.length) {
+            el.textContent += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+        } else {
+            const cursor = document.querySelector('.typing-cursor');
+            if (cursor) cursor.classList.add('blink');
+        }
+    }
+
+    setTimeout(type, 500);
+}
+
 function initSEO(data) {
     const url = data.siteUrl || '';
 
@@ -419,6 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderContact(data);
     renderFooter(data);
 
+    initTypingEffect(data.greeting);
     initTheme();
     initNav();
     initAnimations();

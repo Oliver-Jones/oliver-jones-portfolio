@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Page Not Found | Oliver Jones</title>
+        <link rel="icon" type="image/svg+xml" href="favicon.svg">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --color-bg: #f8fafc;
+                --color-text: #0f172a;
+                --color-text-secondary: #64748b;
+                --color-accent: #2563eb;
+                --color-accent-hover: #1d4ed8;
+            }
+
+            [data-theme="dark"] {
+                --color-bg: #0f172a;
+                --color-text: #f1f5f9;
+                --color-text-secondary: #94a3b8;
+                --color-accent: #3b82f6;
+                --color-accent-hover: #2563eb;
+            }
+
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+
+            body {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                background: var(--color-bg);
+                color: var(--color-text);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                text-align: center;
+                padding: 24px;
+            }
+
+            .error-code {
+                font-size: 8rem;
+                font-weight: 700;
+                color: var(--color-accent);
+                line-height: 1;
+                margin-bottom: 16px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                font-weight: 600;
+                margin-bottom: 12px;
+            }
+
+            p {
+                font-size: 1rem;
+                color: var(--color-text-secondary);
+                margin-bottom: 32px;
+                line-height: 1.6;
+            }
+
+            .btn {
+                display: inline-block;
+                padding: 12px 28px;
+                background: var(--color-accent);
+                color: #ffffff;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: 500;
+                font-size: 0.9375rem;
+                transition: background 0.2s;
+            }
+
+            .btn:hover {
+                background: var(--color-accent-hover);
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="error-code">404</div>
+            <h1>Page Not Found</h1>
+            <p>The page you're looking for doesn't exist or has been moved.</p>
+            <a href="./" class="btn">Back to Portfolio</a>
+        </div>
+        <script>
+            try {
+                const theme = localStorage.getItem('theme') ||
+                    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {}
+        </script>
+    </body>
+</html>
