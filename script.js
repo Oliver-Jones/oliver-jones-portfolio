@@ -136,6 +136,37 @@ function renderTestimonials(data) {
     `).join('');
 }
 
+function renderBlog(data) {
+    const el = document.getElementById('blogContent');
+    if (!data.blog) return;
+
+    const blogUrl = escapeHtml(data.blog.url);
+    let html = '';
+
+    if (data.blog.posts.length > 0) {
+        html += '<div class="blog-grid">';
+        html += data.blog.posts.map(post => `
+            <a href="${escapeHtml(post.url)}" target="_blank" rel="noopener noreferrer" class="blog-card">
+                <span class="blog-date">${escapeHtml(post.date)}</span>
+                <h3>${escapeHtml(post.title)}</h3>
+                <p>${escapeHtml(post.summary)}</p>
+                <span class="blog-read-more">Read more &rarr;</span>
+            </a>
+        `).join('');
+        html += '</div>';
+    } else {
+        html += `
+            <div class="blog-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                <p>I'm starting to share my thoughts on Salesforce architecture, Public Sector solutions, and lessons from 10+ years in the ecosystem. Stay tuned!</p>
+            </div>
+        `;
+    }
+
+    html += `<div class="blog-cta"><a href="${blogUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Visit My Blog</a></div>`;
+    el.innerHTML = html;
+}
+
 function renderContact(data) {
     const el = document.getElementById('contactLinks');
     let html = '';
@@ -300,6 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCertifications(data);
     renderEducation(data);
     renderTestimonials(data);
+    renderBlog(data);
     renderContact(data);
     renderFooter(data);
 

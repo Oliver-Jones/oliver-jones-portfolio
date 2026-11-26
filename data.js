@@ -259,6 +259,10 @@ const PORTFOLIO_DATA = {
       "role": "Mastek"
     }
   ],
+  "blog": {
+    "url": "https://oliverjones-blog.hashnode.dev/",
+    "posts": []
+  },
   "contact": {
     "email": "oliverjonesrajkumar@gmail.com",
     "phone": "+91 8760074918",

@@ -759,6 +759,83 @@ ul {
     font-weight: 500;
 }
 
+/* ========== Blog ========== */
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.blog-card {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 28px;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.blog-card:hover {
+    box-shadow: 0 4px 24px var(--color-card-shadow);
+    border-color: var(--color-accent);
+}
+
+.blog-card .blog-date {
+    font-size: 0.8125rem;
+    color: var(--color-accent);
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.blog-card h3 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--color-text);
+}
+
+.blog-card p {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    flex: 1;
+}
+
+.blog-read-more {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-accent);
+    margin-top: 12px;
+}
+
+.blog-empty {
+    text-align: center;
+    padding: 48px 24px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+}
+
+.blog-empty svg {
+    color: var(--color-accent);
+    opacity: 0.4;
+    margin-bottom: 16px;
+}
+
+.blog-empty p {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.8;
+}
+
+.blog-cta {
+    text-align: center;
+}
+
 /* ========== Contact ========== */
 
 .contact-text {
@@ -910,7 +987,8 @@ ul {
     }
 
     .contact-grid,
-    .testimonials-grid {
+    .testimonials-grid,
+    .blog-grid {
         grid-template-columns: 1fr;
     }
 }
