@@ -155,6 +155,29 @@ function renderFooter(data) {
     el.textContent = `© ${year} ${data.name}. All rights reserved.`;
 }
 
+function initTheme() {
+    const toggle = document.getElementById('themeToggle');
+    let theme;
+    try {
+        theme = localStorage.getItem('theme');
+    } catch (e) {}
+
+    if (!theme) {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    document.documentElement.setAttribute('data-theme', theme);
+
+    toggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        try {
+            localStorage.setItem('theme', next);
+        } catch (e) {}
+    });
+}
+
 function initNav() {
     const nav = document.getElementById('nav');
     const navToggle = document.getElementById('navToggle');
@@ -209,6 +232,47 @@ function initAnimations() {
     sections.forEach(section => sectionObserver.observe(section));
 }
 
+function initContactForm() {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const btn = document.getElementById('formSubmit');
+        const status = document.getElementById('formStatus');
+        const originalText = btn.textContent;
+
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+        status.textContent = '';
+        status.className = 'form-status';
+
+        try {
+            const res = await fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (res.ok) {
+                status.textContent = 'Message sent successfully!';
+                status.classList.add('success');
+                form.reset();
+            } else {
+                status.textContent = 'Something went wrong. Please try again.';
+                status.classList.add('error');
+            }
+        } catch {
+            status.textContent = 'Network error. Please try again later.';
+            status.classList.add('error');
+        }
+
+        btn.disabled = false;
+        btn.textContent = originalText;
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const data = PORTFOLIO_DATA;
 
@@ -222,6 +286,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderContact(data);
     renderFooter(data);
 
+    initTheme();
     initNav();
     initAnimations();
+    initContactForm();
 });

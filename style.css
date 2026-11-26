@@ -18,8 +18,26 @@
     --color-border: #e2e8f0;
     --color-card: #ffffff;
     --color-card-shadow: rgba(15, 23, 42, 0.08);
+    --color-nav-bg: rgba(255, 255, 255, 0.92);
+    --color-tag-bg: #eff6ff;
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --nav-height: 72px;
+}
+
+[data-theme="dark"] {
+    --color-bg: #0f172a;
+    --color-bg-alt: #1e293b;
+    --color-bg-dark: #020617;
+    --color-text: #f1f5f9;
+    --color-text-secondary: #94a3b8;
+    --color-text-light: #f1f5f9;
+    --color-accent: #3b82f6;
+    --color-accent-hover: #2563eb;
+    --color-border: #334155;
+    --color-card: #1e293b;
+    --color-card-shadow: rgba(0, 0, 0, 0.3);
+    --color-nav-bg: rgba(15, 23, 42, 0.92);
+    --color-tag-bg: rgba(59, 130, 246, 0.15);
 }
 
 html {
@@ -33,6 +51,7 @@ body {
     background: var(--color-bg);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    transition: background 0.3s, color 0.3s;
 }
 
 a {
@@ -78,7 +97,7 @@ ul {
     left: 0;
     right: 0;
     height: var(--nav-height);
-    background: rgba(255, 255, 255, 0.92);
+    background: var(--color-nav-bg);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid transparent;
     z-index: 1000;
@@ -105,6 +124,12 @@ ul {
     font-weight: 700;
     color: var(--color-accent);
     letter-spacing: -0.5px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 .nav-links {
@@ -171,6 +196,38 @@ ul {
 .nav-toggle.open span:nth-child(3) {
     transform: translateY(-7px) rotate(-45deg);
 }
+
+/* ========== Theme Toggle ========== */
+
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.theme-toggle:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+    width: 18px;
+    height: 18px;
+}
+
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+
+[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
 
 /* ========== Hero ========== */
 
@@ -461,6 +518,7 @@ ul {
     background: var(--color-bg);
     border: 3px solid var(--color-accent);
     border-radius: 50%;
+    background: var(--color-bg);
     z-index: 1;
 }
 
@@ -568,7 +626,7 @@ ul {
     font-size: 0.75rem;
     font-weight: 500;
     padding: 4px 12px;
-    background: #eff6ff;
+    background: var(--color-tag-bg);
     color: var(--color-accent);
     border-radius: 100px;
 }
@@ -661,6 +719,79 @@ ul {
     margin-bottom: 40px;
 }
 
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #94a3b8;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 12px 16px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #f1f5f9;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    transition: border-color 0.2s;
+    resize: vertical;
+}
+
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group textarea {
+    background: #0f172a;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #475569;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+.form-status {
+    font-size: 0.875rem;
+    min-height: 1.25rem;
+}
+
+.form-status.success {
+    color: #22c55e;
+}
+
+.form-status.error {
+    color: #ef4444;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
 .contact-links {
     display: flex;
     flex-wrap: wrap;
@@ -727,6 +858,10 @@ ul {
     .projects-grid {
         grid-template-columns: 1fr;
     }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 768px) {
@@ -743,7 +878,7 @@ ul {
         top: var(--nav-height);
         left: 0;
         right: 0;
-        background: rgba(255, 255, 255, 0.98);
+        background: var(--color-nav-bg);
         backdrop-filter: blur(12px);
         flex-direction: column;
         padding: 24px;
