@@ -317,9 +317,47 @@ function initContactForm() {
     });
 }
 
+function initSEO(data) {
+    const url = data.siteUrl || '';
+
+    const canonical = document.getElementById('canonicalLink');
+    if (canonical) canonical.href = url;
+
+    const sameAs = [];
+    if (data.contact && data.contact.links) {
+        data.contact.links.forEach(link => sameAs.push(link.url));
+    }
+    if (data.blog && data.blog.url) sameAs.push(data.blog.url);
+
+    const skillItems = [];
+    if (data.skills) {
+        data.skills.forEach(group => group.items.forEach(item => skillItems.push(item)));
+    }
+
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": data.name,
+        "jobTitle": data.title,
+        "url": url,
+        "image": url + "resources/headshot.png",
+        "description": data.heroSummary,
+        "sameAs": sameAs,
+        "worksFor": {
+            "@type": "Organization",
+            "name": data.employer || ""
+        },
+        "knowsAbout": skillItems
+    };
+
+    const el = document.getElementById('jsonLd');
+    if (el) el.textContent = JSON.stringify(jsonLd);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const data = PORTFOLIO_DATA;
 
+    initSEO(data);
     renderHero(data);
     renderAbout(data);
     renderSkills(data);

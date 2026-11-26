@@ -1,6 +1,8 @@
 const PORTFOLIO_DATA = {
+  "siteUrl": "https://oliver-jones.github.io/oliver-jones-portfolio/",
   "name": "Oliver Jones",
   "title": "Team Lead | Salesforce Architect",
+  "employer": "iSight Technology",
   "greeting": "Hello, I'm",
   "heroSummary": "Salesforce Architect & Team Lead with 10+ years of experience designing and delivering enterprise solutions across AgentForce, ServiceNow, and Public Sector platforms.",
   "about": [

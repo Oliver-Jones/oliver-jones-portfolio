@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://oliver-jones.github.io/oliver-jones-portfolio/sitemap.xml
