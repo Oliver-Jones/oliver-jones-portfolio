@@ -164,7 +164,9 @@ function renderCertifications(data) {
     const el = document.getElementById('certsGrid');
     el.innerHTML = data.certifications.map(cert => `
         <div class="cert-card">
-            <div class="cert-icon">${CERT_ICON}</div>
+            ${cert.image
+                ? `<img class="cert-badge" src="${escapeHtml(cert.image)}" alt="${escapeHtml(cert.name)}" loading="lazy" width="200" height="200">`
+                : `<div class="cert-icon">${CERT_ICON}</div>`}
             <h3>${escapeHtml(cert.name)}</h3>
             ${cert.issuer ? `<span class="cert-issuer">${escapeHtml(cert.issuer)}</span>` : ''}
             <span class="cert-date">${escapeHtml(cert.date)}</span>

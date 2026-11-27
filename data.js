@@ -287,19 +287,18 @@ const PORTFOLIO_DATA = {
     }
   ],
   "certifications": [
-    { "name": "Agentforce Specialist", "issuer": "Salesforce", "date": "Mar 2025" },
-    { "name": "AI Associate", "issuer": "Salesforce", "date": "Oct 2024" },
-    { "name": "Data Cloud Consultant", "issuer": "Salesforce", "date": "Oct 2024" },
-    { "name": "Identity and Access Management Architect", "issuer": "Salesforce", "date": "Mar 2024" },
-    { "name": "Development Lifecycle & Deployment Architect (WI22)", "issuer": "Salesforce", "date": "Mar 2022" },
-    { "name": "OmniStudio Developer (SU21)", "issuer": "Salesforce", "date": "Oct 2021" },
-    { "name": "Application Architect", "issuer": "Salesforce", "date": "Dec 2020" },
-    { "name": "Sharing & Visibility Designer (WI21)", "issuer": "Salesforce", "date": "Dec 2020" },
-    { "name": "Flosum Certified Professional", "issuer": "Flosum", "date": "Aug 2020" },
-    { "name": "Data Architecture & Management Designer (WI20)", "issuer": "Salesforce", "date": "Mar 2020" },
-    { "name": "Platform Developer I (WI19)", "issuer": "Salesforce", "date": "Apr 2019" },
-    { "name": "Certified Administrator (SU17)", "issuer": "Salesforce", "date": "Oct 2017" },
-    { "name": "Platform App Builder (WI17)", "issuer": "Salesforce", "date": "Dec 2016" }
+    { "name": "Agentforce Specialist", "issuer": "Salesforce", "date": "Mar 2025", "image": "resources/certifications/certification-agentforce-specialist.webp" },
+    { "name": "AI Associate", "issuer": "Salesforce", "date": "Oct 2024", "image": "resources/certifications/certification-ai-associate.webp" },
+    { "name": "Data Cloud Consultant", "issuer": "Salesforce", "date": "Oct 2024", "image": "resources/certifications/certification-data-cloud-consultant.webp" },
+    { "name": "Identity and Access Management Architect", "issuer": "Salesforce", "date": "Mar 2024", "image": "resources/certifications/certification-identity-architect.webp" },
+    { "name": "Development Lifecycle & Deployment Architect (WI22)", "issuer": "Salesforce", "date": "Mar 2022", "image": "resources/certifications/certification-deployment-architect.webp" },
+    { "name": "OmniStudio Developer (SU21)", "issuer": "Salesforce", "date": "Oct 2021", "image": "resources/certifications/certification-omnistudio-developer.webp" },
+    { "name": "Application Architect", "issuer": "Salesforce", "date": "Dec 2020", "image": "resources/certifications/certification-application-architect.webp" },
+    { "name": "Sharing & Visibility Designer (WI21)", "issuer": "Salesforce", "date": "Dec 2020", "image": "resources/certifications/certification-sharing-architect.webp" },
+    { "name": "Data Architecture & Management Designer (WI20)", "issuer": "Salesforce", "date": "Mar 2020", "image": "resources/certifications/certification-data-architect.webp" },
+    { "name": "Platform Developer I (WI19)", "issuer": "Salesforce", "date": "Apr 2019", "image": "resources/certifications/certification-platform-developer-i.webp" },
+    { "name": "Certified Administrator (SU17)", "issuer": "Salesforce", "date": "Oct 2017", "image": "resources/certifications/certification-admin.webp" },
+    { "name": "Platform App Builder (WI17)", "issuer": "Salesforce", "date": "Dec 2016", "image": "resources/certifications/certification-app-builder.webp" }
   ],
   "education": [
     {

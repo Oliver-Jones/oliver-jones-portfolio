@@ -1,4 +1,4 @@
-const CACHE_NAME = 'oj-portfolio-v2';
+const CACHE_NAME = 'oj-portfolio-v3';
 const ASSETS = [
     './',
     './index.html',
@@ -33,7 +33,19 @@ const ASSETS = [
     './resources/projects/project-california-hcd-400.webp',
     './resources/projects/project-republic-services.webp',
     './resources/projects/project-republic-services-800.webp',
-    './resources/projects/project-republic-services-400.webp'
+    './resources/projects/project-republic-services-400.webp',
+    './resources/certifications/certification-admin.webp',
+    './resources/certifications/certification-agentforce-specialist.webp',
+    './resources/certifications/certification-app-builder.webp',
+    './resources/certifications/certification-application-architect.webp',
+    './resources/certifications/certification-data-architect.webp',
+    './resources/certifications/certification-data-cloud-consultant.webp',
+    './resources/certifications/certification-deployment-architect.webp',
+    './resources/certifications/certification-identity-architect.webp',
+    './resources/certifications/certification-omnistudio-developer.webp',
+    './resources/certifications/certification-sharing-architect.webp',
+    './resources/certifications/certification-ai-associate.webp',
+    './resources/certifications/certification-platform-developer-i.webp'
 ];
 
 self.addEventListener('install', (e) => {
