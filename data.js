@@ -360,6 +360,13 @@ const PORTFOLIO_DATA = {
         "readTime": 8,
         "summary": "A decade-long journey from Android Developer Intern to Salesforce Team Lead — lessons on development, architecture, integrations, and leadership.",
         "url": "https://oliverjones-blog.hashnode.dev/beyond-the-code-from-android-intern-to-salesforce-team-lead"
+      },
+      {
+        "title": "10 Things I Wish I Knew When I Started My Salesforce Career",
+        "date": "Nov 2026",
+        "readTime": 15,
+        "summary": "What a decade of real-world projects taught me about development, delivery, and growth — from writing code to understanding business, communication, and scalability.",
+        "url": "https://oliverjones-blog.hashnode.dev/10-things-i-wish-i-knew-when-i-started-my-salesforce-career"
       }
     ]
   },
