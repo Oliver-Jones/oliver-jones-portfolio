@@ -160,6 +160,7 @@ const PORTFOLIO_DATA = {
       "name": "Arizona Supreme Court - Defensive Driving School (Renewal Application)",
       "date": "Aug 2025",
       "description": "Salesforce-based renewal application for the Arizona Supreme Court's Defensive Driving School program.",
+      "image": "resources/project-az-courts.jpg",
       "tags": ["Salesforce Administrator", "Apex"]
     },
     {
@@ -173,24 +174,28 @@ const PORTFOLIO_DATA = {
       "name": "Industrial Commission of Arizona - Worker's Compensation and Tax Assessment (ICA-Tax)",
       "date": "Mar 2022 — May 2024",
       "description": "All insurance companies authorized to write workers' compensation policies in the State of Arizona are required to file Annual Workers' Compensation Tax forms and any associated payment.",
+      "image": "resources/project-ica.jpg",
       "tags": ["Public Sector", "State Government", "LWC", "Flows"]
     },
     {
       "name": "California Housing and Community Development (CA-HCD)",
       "date": "Jan 2023 — May 2023",
       "description": "The California Department of Housing and Community Development (HCD) develops housing policy within the California Business, Consumer Services and Housing Agency.",
+      "image": "resources/project-california-hcd.png",
       "tags": ["Salesforce Developer", "Experience Cloud", "OmniStudio"]
     },
     {
       "name": "ICA - Firefighter & Fire Investigator Cancer Claims Reporting",
       "date": "Feb 2022 — Apr 2022",
       "description": "Regulations and procedures related to reporting cancer claims among firefighters and fire investigators in Arizona under the Arizona Administrative Code.",
+      "image": "resources/project-ica.jpg",
       "tags": ["Public Sector", "Experience Cloud", "LWC"]
     },
     {
       "name": "Industrial Commission of Arizona (ICA)",
       "date": "Sep 2017 — Jan 2022",
       "description": "A state agency responsible for administering and enforcing labor laws in Arizona, including workers' compensation, occupational safety, and related matters.",
+      "image": "resources/project-ica.jpg",
       "tags": ["Case Management", "Claims Management", "Service Cloud"]
     },
     {
