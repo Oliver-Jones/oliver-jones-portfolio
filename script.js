@@ -77,7 +77,7 @@ function renderSkills(data) {
 function renderExperience(data) {
     const el = document.getElementById('timeline');
     el.innerHTML = data.experience.map(job => `
-        <div class="timeline-item fade-up">
+        <div class="timeline-item">
             <div class="timeline-marker"></div>
             <div class="timeline-content">
                 <div class="timeline-header">
@@ -454,6 +454,26 @@ function initAnimations() {
             { threshold: 0.3 }
         );
         skillsObserver.observe(skillsGrid);
+    }
+
+    const timeline = document.querySelector('.timeline');
+    if (timeline) {
+        const timelineItems = timeline.querySelectorAll('.timeline-item');
+        const timelineObserver = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        timeline.classList.add('animated');
+                        timelineItems.forEach((item, i) => {
+                            setTimeout(() => item.classList.add('visible'), i * 200);
+                        });
+                        timelineObserver.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+        timelineObserver.observe(timeline);
     }
 }
 
