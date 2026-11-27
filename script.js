@@ -173,10 +173,6 @@ function renderTestimonials(data) {
         </div>
     `).join('');
 
-    const dots = data.testimonials.map((_, i) =>
-        `<button class="carousel-dot${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="Go to testimonial ${i + 1}"></button>`
-    ).join('');
-
     el.innerHTML = `
         <div class="carousel fade-up">
             <div class="carousel-track">${cards}</div>
@@ -187,7 +183,7 @@ function renderTestimonials(data) {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
             </button>
         </div>
-        <div class="carousel-dots fade-up">${dots}</div>
+        <div class="carousel-dots fade-up"></div>
     `;
 
     initCarousel(el);
@@ -196,7 +192,7 @@ function renderTestimonials(data) {
 function initCarousel(container) {
     const track = container.querySelector('.carousel-track');
     const cards = track.querySelectorAll('.testimonial-card');
-    const dots = container.querySelectorAll('.carousel-dot');
+    const dotsContainer = container.querySelector('.carousel-dots');
     const prevBtn = container.querySelector('.carousel-prev');
     const nextBtn = container.querySelector('.carousel-next');
     let current = 0;
@@ -208,6 +204,16 @@ function initCarousel(container) {
 
     function getMaxIndex() {
         return Math.max(0, cards.length - getPerView());
+    }
+
+    function buildDots() {
+        const count = getMaxIndex() + 1;
+        dotsContainer.innerHTML = Array.from({ length: count }, (_, i) =>
+            `<button class="carousel-dot${i === current ? ' active' : ''}" data-index="${i}" aria-label="Go to testimonial ${i + 1}"></button>`
+        ).join('');
+        dotsContainer.querySelectorAll('.carousel-dot').forEach(dot =>
+            dot.addEventListener('click', () => goTo(parseInt(dot.dataset.index)))
+        );
     }
 
     function update() {
@@ -222,7 +228,9 @@ function initCarousel(container) {
 
         track.style.transform = `translateX(-${current * (cardWidth + gap)}px)`;
 
-        dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
+        dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, i) =>
+            dot.classList.toggle('active', i === current)
+        );
         prevBtn.disabled = current === 0;
         nextBtn.disabled = current >= getMaxIndex();
     }
@@ -246,9 +254,12 @@ function initCarousel(container) {
 
     prevBtn.addEventListener('click', () => goTo(current - 1));
     nextBtn.addEventListener('click', () => goTo(current + 1));
-    dots.forEach(dot => dot.addEventListener('click', () => goTo(parseInt(dot.dataset.index))));
 
-    window.addEventListener('resize', () => update());
+    window.addEventListener('resize', () => {
+        if (current > getMaxIndex()) current = getMaxIndex();
+        buildDots();
+        update();
+    });
 
     let touchStartX = 0;
     track.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
@@ -259,6 +270,7 @@ function initCarousel(container) {
         }
     });
 
+    buildDots();
     update();
     resetAutoplay();
 }
