@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /secret.html
 
-Sitemap: https://oliver-jones.github.io/oliver-jones-portfolio/sitemap.xml
+Sitemap: https://oliverjones.dev/sitemap.xml

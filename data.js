@@ -1,5 +1,5 @@
 const PORTFOLIO_DATA = {
-  "siteUrl": "https://oliver-jones.github.io/oliver-jones-portfolio/",
+  "siteUrl": "https://oliverjones.dev/",
   "name": "Oliver Jones",
   "title": "Team Lead | Salesforce Architect",
   "employer": "iSight Technology",
