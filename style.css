@@ -834,9 +834,18 @@ ul {
 /* ========== Testimonials ========== */
 
 .testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    max-width: 100%;
+}
+
+.carousel {
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
     gap: 24px;
+    transition: transform 0.4s ease;
 }
 
 .testimonial-card {
@@ -845,6 +854,9 @@ ul {
     border-radius: 12px;
     padding: 32px;
     position: relative;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .testimonial-card .quote-icon {
@@ -859,6 +871,7 @@ ul {
     line-height: 1.8;
     font-style: italic;
     margin-bottom: 20px;
+    flex: 1;
 }
 
 .testimonial-author {
@@ -879,6 +892,65 @@ ul {
     font-size: 0.8125rem;
     color: var(--color-accent);
     font-weight: 500;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px var(--color-card-shadow);
+    z-index: 2;
+}
+
+.carousel-btn:hover:not(:disabled) {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.carousel-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.carousel-prev { left: -16px; }
+.carousel-next { right: -16px; }
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.carousel-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-border);
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.carousel-dot.active {
+    background: var(--color-accent);
+    transform: scale(1.2);
+}
+
+.carousel-dot:hover:not(.active) {
+    background: var(--color-text-secondary);
 }
 
 /* ========== Blog ========== */
@@ -1137,7 +1209,6 @@ ul {
     }
 
     .contact-grid,
-    .testimonials-grid,
     .blog-grid {
         grid-template-columns: 1fr;
     }
@@ -1146,6 +1217,14 @@ ul {
 @media (max-width: 768px) {
     :root {
         --nav-height: 64px;
+    }
+
+    .carousel-prev { left: 0; }
+    .carousel-next { right: 0; }
+    .carousel-btn {
+        width: 36px;
+        height: 36px;
+        opacity: 0.85;
     }
 
     .nav-toggle {

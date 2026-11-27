@@ -160,10 +160,10 @@ function renderEducation(data) {
 
 function renderTestimonials(data) {
     const el = document.getElementById('testimonialsGrid');
-    if (!data.testimonials) return;
+    if (!data.testimonials || !data.testimonials.length) return;
 
-    el.innerHTML = data.testimonials.map(t => `
-        <div class="testimonial-card fade-up">
+    const cards = data.testimonials.map(t => `
+        <div class="testimonial-card">
             <svg class="quote-icon" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C9.591 11.69 11 13.166 11 15c0 1.933-1.567 3.5-3.5 3.5-1.172 0-2.283-.549-2.917-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C19.591 11.69 21 13.166 21 15c0 1.933-1.567 3.5-3.5 3.5-1.172 0-2.283-.549-2.917-1.179z"/></svg>
             <blockquote>${escapeHtml(t.quote)}</blockquote>
             <div class="testimonial-author">
@@ -172,6 +172,95 @@ function renderTestimonials(data) {
             </div>
         </div>
     `).join('');
+
+    const dots = data.testimonials.map((_, i) =>
+        `<button class="carousel-dot${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="Go to testimonial ${i + 1}"></button>`
+    ).join('');
+
+    el.innerHTML = `
+        <div class="carousel fade-up">
+            <div class="carousel-track">${cards}</div>
+            <button class="carousel-btn carousel-prev" aria-label="Previous testimonial">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button class="carousel-btn carousel-next" aria-label="Next testimonial">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+        </div>
+        <div class="carousel-dots fade-up">${dots}</div>
+    `;
+
+    initCarousel(el);
+}
+
+function initCarousel(container) {
+    const track = container.querySelector('.carousel-track');
+    const cards = track.querySelectorAll('.testimonial-card');
+    const dots = container.querySelectorAll('.carousel-dot');
+    const prevBtn = container.querySelector('.carousel-prev');
+    const nextBtn = container.querySelector('.carousel-next');
+    let current = 0;
+    let autoplayTimer;
+
+    function getPerView() {
+        return window.innerWidth <= 768 ? 1 : 2;
+    }
+
+    function getMaxIndex() {
+        return Math.max(0, cards.length - getPerView());
+    }
+
+    function update() {
+        const perView = getPerView();
+        const gap = 24;
+        const cardWidth = (track.parentElement.clientWidth - gap * (perView - 1)) / perView;
+
+        cards.forEach(card => {
+            card.style.minWidth = cardWidth + 'px';
+            card.style.maxWidth = cardWidth + 'px';
+        });
+
+        track.style.transform = `translateX(-${current * (cardWidth + gap)}px)`;
+
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current >= getMaxIndex();
+    }
+
+    function goTo(index) {
+        current = Math.max(0, Math.min(index, getMaxIndex()));
+        update();
+        resetAutoplay();
+    }
+
+    function resetAutoplay() {
+        clearInterval(autoplayTimer);
+        autoplayTimer = setInterval(() => {
+            if (current >= getMaxIndex()) {
+                goTo(0);
+            } else {
+                goTo(current + 1);
+            }
+        }, 5000);
+    }
+
+    prevBtn.addEventListener('click', () => goTo(current - 1));
+    nextBtn.addEventListener('click', () => goTo(current + 1));
+    dots.forEach(dot => dot.addEventListener('click', () => goTo(parseInt(dot.dataset.index))));
+
+    window.addEventListener('resize', () => update());
+
+    let touchStartX = 0;
+    track.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', (e) => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+            goTo(current + (diff > 0 ? 1 : -1));
+        }
+    });
+
+    update();
+    resetAutoplay();
 }
 
 function renderBlog(data) {
