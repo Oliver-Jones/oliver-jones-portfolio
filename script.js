@@ -19,7 +19,10 @@ function renderHero(data) {
 
     el.innerHTML = `
         <div class="hero-photo fade-up">
-            <img src="resources/headshot.jpg" alt="${escapeHtml(data.name)}" loading="eager" decoding="async" width="150" height="150">
+            <picture>
+                <source type="image/webp" srcset="resources/hero/headshot.webp">
+                <img src="resources/hero/headshot.jpg" alt="${escapeHtml(data.name)}" loading="eager" decoding="async" width="150" height="150">
+            </picture>
         </div>
         <div class="hero-text">
             <p class="hero-greeting fade-up"><span id="typedGreeting"></span><span class="typing-cursor">|</span></p>
@@ -63,9 +66,10 @@ function renderSkills(data) {
                     return `<li>
                         <div class="skill-info">
                             <span>${escapeHtml(name)}</span>
+                            <span class="skill-percent">${level}%</span>
                         </div>
                         <div class="skill-bar">
-                            <div class="skill-bar-fill" data-level="${level}"></div>
+                            <div class="skill-bar-fill" data-level="${level}" style="--fill:${level}%"></div>
                         </div>
                     </li>`;
                 }).join('')}
@@ -109,7 +113,15 @@ function renderProjects(data) {
 
         grid.innerHTML = filtered.map(proj => `
             <div class="project-card fade-up">
-                ${proj.image ? `<img class="project-thumb" src="${escapeHtml(proj.image)}" alt="${escapeHtml(proj.name)}" loading="lazy" decoding="async">` : ''}
+                ${proj.image ? (() => {
+                    const base = escapeHtml(proj.image.replace(/\.(png|jpg|jpeg)$/i, ''));
+                    return `<picture>
+                        <source type="image/webp"
+                            srcset="${base}-400.webp 400w, ${base}-800.webp 800w, ${base}.webp 1774w"
+                            sizes="(max-width: 900px) 100vw, 50vw">
+                        <img class="project-thumb" src="${escapeHtml(proj.image)}" alt="${escapeHtml(proj.name)}" loading="lazy" decoding="async">
+                    </picture>`;
+                })() : ''}
                 <div class="project-body">
                     <div class="project-date">${escapeHtml(proj.date)}</div>
                     <h3>${escapeHtml(proj.name)}</h3>
@@ -123,6 +135,17 @@ function renderProjects(data) {
 
         grid.querySelectorAll('.project-card').forEach((card, i) => {
             setTimeout(() => card.classList.add('visible'), i * 80);
+            card.style.cursor = 'pointer';
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('role', 'button');
+            card.setAttribute('aria-label', `View details for ${filtered[i].name}`);
+            card.addEventListener('click', () => openProjectModal(filtered[i]));
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openProjectModal(filtered[i]);
+                }
+            });
         });
     }
 
@@ -366,16 +389,26 @@ function initNav() {
     const navLinks = document.getElementById('navLinks');
     const backToTop = document.getElementById('backToTop');
 
+    const heroContent = document.getElementById('heroContent');
     window.addEventListener('scroll', () => {
         nav.classList.toggle('scrolled', window.scrollY > 10);
         if (backToTop) {
             backToTop.classList.toggle('visible', window.scrollY > 400);
         }
+        if (heroContent && window.scrollY < window.innerHeight) {
+            heroContent.style.transform = `translateY(${window.scrollY * 0.3}px)`;
+            heroContent.style.opacity = 1 - window.scrollY / window.innerHeight;
+        }
     });
 
     if (backToTop) {
         backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const main = document.querySelector('main');
+            main.classList.add('nav-transitioning');
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                main.classList.remove('nav-transitioning');
+            }, 250);
         });
     }
 
@@ -523,21 +556,23 @@ function animateCounters() {
         const target = el.getAttribute('data-target');
         const num = parseInt(target);
         const suffix = target.replace(/^\d+/, '');
-        const duration = 1500;
-        const steps = 60;
-        const increment = num / steps;
-        let current = 0;
-        let step = 0;
+        const duration = 1800;
+        let start = null;
 
-        const timer = setInterval(() => {
-            step++;
-            current = Math.min(Math.round(increment * step), num);
+        function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+        function tick(timestamp) {
+            if (!start) start = timestamp;
+            const progress = Math.min((timestamp - start) / duration, 1);
+            const current = Math.round(easeOutCubic(progress) * num);
             el.textContent = current + suffix;
-            if (step >= steps) {
+            if (progress < 1) {
+                requestAnimationFrame(tick);
+            } else {
                 el.textContent = target;
-                clearInterval(timer);
             }
-        }, duration / steps);
+        }
+        requestAnimationFrame(tick);
     });
 }
 
@@ -605,6 +640,85 @@ function initTypingEffect(text) {
     }
 
     setTimeout(type, 500);
+}
+
+function openProjectModal(proj) {
+    if (document.getElementById('projectModal')) return;
+
+    const techHtml = (proj.techStack || proj.tags).map(t =>
+        `<span class="pm-tech-tag">${escapeHtml(t)}</span>`
+    ).join('');
+
+    const highlightsHtml = (proj.highlights || []).map(h =>
+        `<li>${escapeHtml(h)}</li>`
+    ).join('');
+
+    const modal = document.createElement('div');
+    modal.id = 'projectModal';
+    modal.className = 'project-modal';
+    modal.innerHTML = `
+        <div class="pm-backdrop"></div>
+        <div class="pm-content">
+            <button class="pm-close" aria-label="Close project details">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+            </button>
+            ${proj.image ? (() => {
+                const base = escapeHtml(proj.image.replace(/\.(png|jpg|jpeg)$/i, ''));
+                return `<picture>
+                    <source type="image/webp"
+                        srcset="${base}-400.webp 400w, ${base}-800.webp 800w, ${base}.webp 1774w"
+                        sizes="(max-width: 768px) 100vw, 640px">
+                    <img class="pm-hero" src="${escapeHtml(proj.image)}" alt="${escapeHtml(proj.name)}">
+                </picture>`;
+            })() : ''}
+            <div class="pm-body">
+                <div class="pm-header">
+                    <h2>${escapeHtml(proj.name)}</h2>
+                    <div class="pm-meta">
+                        <span class="pm-date">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            ${escapeHtml(proj.date)}
+                        </span>
+                        ${proj.role ? `<span class="pm-role">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            ${escapeHtml(proj.role)}
+                        </span>` : ''}
+                    </div>
+                </div>
+                <p class="pm-description">${escapeHtml(proj.description)}</p>
+                ${highlightsHtml ? `
+                <div class="pm-section">
+                    <h3>Key Highlights</h3>
+                    <ul class="pm-highlights">${highlightsHtml}</ul>
+                </div>` : ''}
+                <div class="pm-section">
+                    <h3>Tech Stack</h3>
+                    <div class="pm-tech">${techHtml}</div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => modal.classList.add('open'));
+
+    function closeModal() {
+        modal.classList.remove('open');
+        modal.addEventListener('transitionend', () => {
+            modal.remove();
+            document.body.style.overflow = '';
+        }, { once: true });
+    }
+
+    modal.querySelector('.pm-backdrop').addEventListener('click', closeModal);
+    modal.querySelector('.pm-close').addEventListener('click', closeModal);
+    document.addEventListener('keydown', function handler(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+            document.removeEventListener('keydown', handler);
+        }
+    });
 }
 
 function openResumePreview(data) {
@@ -787,7 +901,9 @@ function initSEO(data) {
 
     const skillItems = [];
     if (data.skills) {
-        data.skills.forEach(group => group.items.forEach(item => skillItems.push(item)));
+        data.skills.forEach(group => group.items.forEach(item =>
+            skillItems.push(typeof item === 'string' ? item : item.name)
+        ));
     }
 
     const jsonLd = {
@@ -796,7 +912,7 @@ function initSEO(data) {
         "name": data.name,
         "jobTitle": data.title,
         "url": url,
-        "image": url + "resources/headshot.jpg",
+        "image": url + "resources/hero/headshot.jpg",
         "description": data.heroSummary,
         "sameAs": sameAs,
         "worksFor": {
@@ -832,6 +948,20 @@ document.addEventListener('DOMContentLoaded', () => {
     initContactForm();
     initKonamiCode();
 
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn');
+        if (!btn) return;
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        const rect = btn.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+        ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+        btn.appendChild(ripple);
+        ripple.addEventListener('animationend', () => ripple.remove());
+    });
+
     console.log('%c  ___  _\n / _ \\| |\n| | | | |\n| |_| | |\n \\___/|_|', 'color: #2563eb; font-size: 14px; font-weight: bold;');
     console.log('%cHey, curious developer! 👀', 'color: #2563eb; font-size: 18px; font-weight: bold; margin-top: 8px;');
     console.log('%cLike what you see? Let\'s connect → linkedin.com/in/oliver-jones-rajkumar', 'color: #64748b; font-size: 12px;');
@@ -847,5 +977,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1200);
     } else {
         initTypingEffect(data.greeting);
+    }
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./service-worker.js');
     }
 });
