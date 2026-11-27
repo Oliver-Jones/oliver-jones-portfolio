@@ -1429,6 +1429,16 @@ ul {
     transform: translateY(0);
 }
 
+/* ========== Nav Transition ========== */
+
+main {
+    transition: opacity 0.25s ease;
+}
+
+main.nav-transitioning {
+    opacity: 0.3;
+}
+
 /* ========== Back to Top ========== */
 
 .back-to-top {

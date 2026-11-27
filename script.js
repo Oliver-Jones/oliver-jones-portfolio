@@ -382,9 +382,22 @@ function initNav() {
     });
 
     navLinks.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
+        link.addEventListener('click', (e) => {
             navToggle.classList.remove('open');
             navLinks.classList.remove('open');
+
+            const targetId = link.getAttribute('href');
+            const target = document.querySelector(targetId);
+            if (!target) return;
+
+            e.preventDefault();
+            const main = document.querySelector('main');
+            main.classList.add('nav-transitioning');
+
+            setTimeout(() => {
+                target.scrollIntoView({ behavior: 'smooth' });
+                main.classList.remove('nav-transitioning');
+            }, 250);
         });
     });
 }
