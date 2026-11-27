@@ -76,7 +76,6 @@ function generateResume(data) {
     doc.setTextColor(...COLORS.light);
     const contactParts = [];
     if (data.contact.email) contactParts.push(data.contact.email);
-    if (data.contact.phone) contactParts.push(data.contact.phone);
     if (data.contact.links) {
         data.contact.links.forEach(link => contactParts.push(link.label + ': ' + link.url));
     }

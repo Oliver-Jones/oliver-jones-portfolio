@@ -25,7 +25,7 @@
         <link rel="manifest" href="manifest.json">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <link rel="apple-touch-icon" href="resources/icon-192.png">
+        <link rel="apple-touch-icon" href="resources/icons/icon-192.png">
         <link rel="preload" as="image" type="image/webp" href="resources/hero/headshot.webp">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,10 +42,11 @@
                 <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
             </div>
         </div>
+        <div class="scroll-progress" id="scrollProgress"></div>
         <a href="#about" class="skip-link">Skip to main content</a>
-        <nav class="nav" id="nav">
+        <nav class="nav" id="nav" aria-label="Main navigation">
             <div class="nav-container">
-                <a href="#hero" class="nav-logo">OJ</a>
+                <a href="#hero" class="nav-logo" aria-label="Oliver Jones — go to top">OJ</a>
                 <div class="nav-right">
                     <ul class="nav-links" id="navLinks">
                         <li><a href="#about">About</a></li>
@@ -72,11 +73,11 @@
         </nav>
 
         <main>
-        <section class="hero" id="hero">
+        <section class="hero" id="hero" aria-label="Introduction">
             <div class="hero-content" id="heroContent"></div>
             <div class="hero-scroll">
                 <a href="#about" aria-label="Scroll down">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M12 5v14M5 12l7 7 7-7"/>
                     </svg>
                 </a>
@@ -140,12 +141,12 @@
             </div>
         </section>
 
-        <section class="section section-dark" id="contact">
+        <section class="section section-dark" id="contact" aria-label="Contact information">
             <div class="container">
                 <h2 class="section-title fade-up">Get in Touch</h2>
                 <p class="contact-text fade-up">I'm open to discussing new opportunities, Salesforce architecture challenges, or collaboration on AgentForce, ServiceNow, and Public Sector projects.</p>
                 <div class="contact-grid fade-up">
-                    <form class="contact-form" id="contactForm" method="POST">
+                    <form class="contact-form" id="contactForm" method="POST" aria-label="Contact form">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" id="name" name="name" required placeholder="Your name">
@@ -159,7 +160,7 @@
                             <textarea id="message" name="message" rows="5" required placeholder="Your message"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary" id="formSubmit">Send Message</button>
-                        <p class="form-status" id="formStatus"></p>
+                        <p class="form-status" id="formStatus" aria-live="polite"></p>
                     </form>
                     <div class="contact-info" id="contactLinks"></div>
                 </div>

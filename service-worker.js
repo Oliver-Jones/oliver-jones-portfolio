@@ -1,4 +1,4 @@
-const CACHE_NAME = 'oj-portfolio-v1';
+const CACHE_NAME = 'oj-portfolio-v2';
 const ASSETS = [
     './',
     './index.html',
@@ -7,10 +7,33 @@ const ASSETS = [
     './data.js',
     './resume.js',
     './favicon.svg',
+    './manifest.json',
+    './404.html',
     './resources/hero/headshot.jpg',
     './resources/hero/headshot.webp',
-    './resources/icon-192.png',
-    './resources/icon-512.png'
+    './resources/icons/icon-192.png',
+    './resources/icons/icon-512.png',
+    './resources/projects/project-ica.webp',
+    './resources/projects/project-ica-800.webp',
+    './resources/projects/project-ica-400.webp',
+    './resources/projects/project-avere-dmv.webp',
+    './resources/projects/project-avere-dmv-800.webp',
+    './resources/projects/project-avere-dmv-400.webp',
+    './resources/projects/project-willscot.webp',
+    './resources/projects/project-willscot-800.webp',
+    './resources/projects/project-willscot-400.webp',
+    './resources/projects/project-az-courts.webp',
+    './resources/projects/project-az-courts-800.webp',
+    './resources/projects/project-az-courts-400.webp',
+    './resources/projects/project-wyoming-ptsb.webp',
+    './resources/projects/project-wyoming-ptsb-800.webp',
+    './resources/projects/project-wyoming-ptsb-400.webp',
+    './resources/projects/project-california-hcd.webp',
+    './resources/projects/project-california-hcd-800.webp',
+    './resources/projects/project-california-hcd-400.webp',
+    './resources/projects/project-republic-services.webp',
+    './resources/projects/project-republic-services-800.webp',
+    './resources/projects/project-republic-services-400.webp'
 ];
 
 self.addEventListener('install', (e) => {

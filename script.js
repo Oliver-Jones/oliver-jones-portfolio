@@ -114,13 +114,12 @@ function renderProjects(data) {
         grid.innerHTML = filtered.map(proj => `
             <div class="project-card fade-up">
                 ${proj.image ? (() => {
-                    const base = escapeHtml(proj.image.replace(/\.(png|jpg|jpeg)$/i, ''));
-                    return `<picture>
-                        <source type="image/webp"
-                            srcset="${base}-400.webp 400w, ${base}-800.webp 800w, ${base}.webp 1774w"
-                            sizes="(max-width: 900px) 100vw, 50vw">
-                        <img class="project-thumb" src="${escapeHtml(proj.image)}" alt="${escapeHtml(proj.name)}" loading="lazy" decoding="async">
-                    </picture>`;
+                    const base = escapeHtml(proj.image.replace(/\.(png|jpg|jpeg|webp)$/i, ''));
+                    return `<img class="project-thumb"
+                        src="${escapeHtml(proj.image)}"
+                        srcset="${base}-400.webp 400w, ${base}-800.webp 800w, ${base}.webp 1774w"
+                        sizes="(max-width: 900px) 100vw, 50vw"
+                        alt="${escapeHtml(proj.name)}" loading="lazy" decoding="async">`;
                 })() : ''}
                 <div class="project-body">
                     <div class="project-date">${escapeHtml(proj.date)}</div>
@@ -200,16 +199,16 @@ function renderTestimonials(data) {
     `).join('');
 
     el.innerHTML = `
-        <div class="carousel fade-up">
-            <div class="carousel-track">${cards}</div>
+        <div class="carousel fade-up" role="region" aria-label="Testimonials" aria-roledescription="carousel">
+            <div class="carousel-track" aria-live="polite">${cards}</div>
             <button class="carousel-btn carousel-prev" aria-label="Previous testimonial">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
             <button class="carousel-btn carousel-next" aria-label="Next testimonial">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
             </button>
         </div>
-        <div class="carousel-dots fade-up"></div>
+        <div class="carousel-dots fade-up" role="tablist" aria-label="Testimonial slides"></div>
     `;
 
     initCarousel(el);
@@ -235,7 +234,7 @@ function initCarousel(container) {
     function buildDots() {
         const count = getMaxIndex() + 1;
         dotsContainer.innerHTML = Array.from({ length: count }, (_, i) =>
-            `<button class="carousel-dot${i === current ? ' active' : ''}" data-index="${i}" aria-label="Go to testimonial ${i + 1}"></button>`
+            `<button class="carousel-dot${i === current ? ' active' : ''}" data-index="${i}" role="tab" aria-selected="${i === current}" aria-label="Testimonial slide ${i + 1}"></button>`
         ).join('');
         dotsContainer.querySelectorAll('.carousel-dot').forEach(dot =>
             dot.addEventListener('click', () => goTo(parseInt(dot.dataset.index)))
@@ -254,9 +253,10 @@ function initCarousel(container) {
 
         track.style.transform = `translateX(-${current * (cardWidth + gap)}px)`;
 
-        dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, i) =>
-            dot.classList.toggle('active', i === current)
-        );
+        dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === current);
+            dot.setAttribute('aria-selected', i === current);
+        });
         prevBtn.disabled = current === 0;
         nextBtn.disabled = current >= getMaxIndex();
     }
@@ -393,14 +393,20 @@ function initNav() {
     const backToTop = document.getElementById('backToTop');
 
     const heroContent = document.getElementById('heroContent');
+    const scrollProgress = document.getElementById('scrollProgress');
     window.addEventListener('scroll', () => {
         nav.classList.toggle('scrolled', window.scrollY > 10);
         if (backToTop) {
             backToTop.classList.toggle('visible', window.scrollY > 400);
         }
-        if (heroContent && window.scrollY < window.innerHeight) {
+        if (heroContent && window.scrollY < window.innerHeight && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             heroContent.style.transform = `translateY(${window.scrollY * 0.3}px)`;
             heroContent.style.opacity = 1 - window.scrollY / window.innerHeight;
+        }
+        if (scrollProgress) {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            scrollProgress.style.width = (scrollTop / docHeight * 100) + '%';
         }
     });
 
@@ -419,15 +425,22 @@ function initNav() {
     let logoClicks = 0;
     let logoTimer;
     logo.addEventListener('click', (e) => {
+        e.preventDefault();
         logoClicks++;
         clearTimeout(logoTimer);
         logoTimer = setTimeout(() => { logoClicks = 0; }, 800);
         if (logoClicks >= 5) {
             logoClicks = 0;
-            e.preventDefault();
             logo.classList.add('logo-spin');
             logo.addEventListener('animationend', () => logo.classList.remove('logo-spin'), { once: true });
             triggerEasterEgg();
+        } else {
+            const main = document.querySelector('main');
+            main.classList.add('nav-transitioning');
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                main.classList.remove('nav-transitioning');
+            }, 250);
         }
     });
 
@@ -555,8 +568,15 @@ function initAnimations() {
 }
 
 function animateCounters() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     document.querySelectorAll('.stat-number[data-target]').forEach(el => {
         const target = el.getAttribute('data-target');
+
+        if (prefersReducedMotion) {
+            el.textContent = target;
+            return;
+        }
+
         const num = parseInt(target);
         const suffix = target.replace(/^\d+/, '');
         const duration = 1800;
@@ -607,7 +627,7 @@ function initContactForm() {
             });
 
             if (res.ok) {
-                status.textContent = 'Message sent successfully!';
+                status.innerHTML = '<svg class="checkmark" viewBox="0 0 52 52"><circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg><span>Message sent successfully!</span>';
                 status.classList.add('success');
                 form.reset();
             } else {
@@ -659,6 +679,9 @@ function openProjectModal(proj) {
     const modal = document.createElement('div');
     modal.id = 'projectModal';
     modal.className = 'project-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'pmTitle');
     modal.innerHTML = `
         <div class="pm-backdrop"></div>
         <div class="pm-content">
@@ -666,17 +689,16 @@ function openProjectModal(proj) {
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
             </button>
             ${proj.image ? (() => {
-                const base = escapeHtml(proj.image.replace(/\.(png|jpg|jpeg)$/i, ''));
-                return `<picture>
-                    <source type="image/webp"
-                        srcset="${base}-400.webp 400w, ${base}-800.webp 800w, ${base}.webp 1774w"
-                        sizes="(max-width: 768px) 100vw, 640px">
-                    <img class="pm-hero" src="${escapeHtml(proj.image)}" alt="${escapeHtml(proj.name)}">
-                </picture>`;
+                const base = escapeHtml(proj.image.replace(/\.(png|jpg|jpeg|webp)$/i, ''));
+                return `<img class="pm-hero"
+                    src="${escapeHtml(proj.image)}"
+                    srcset="${base}-400.webp 400w, ${base}-800.webp 800w, ${base}.webp 1774w"
+                    sizes="(max-width: 768px) 100vw, 640px"
+                    alt="${escapeHtml(proj.name)}">`;
             })() : ''}
             <div class="pm-body">
                 <div class="pm-header">
-                    <h2>${escapeHtml(proj.name)}</h2>
+                    <h2 id="pmTitle">${escapeHtml(proj.name)}</h2>
                     <div class="pm-meta">
                         <span class="pm-date">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -706,6 +728,9 @@ function openProjectModal(proj) {
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => modal.classList.add('open'));
 
+    const closeBtn = modal.querySelector('.pm-close');
+    closeBtn.focus();
+
     function closeModal() {
         modal.classList.remove('open');
         modal.addEventListener('transitionend', () => {
@@ -715,7 +740,7 @@ function openProjectModal(proj) {
     }
 
     modal.querySelector('.pm-backdrop').addEventListener('click', closeModal);
-    modal.querySelector('.pm-close').addEventListener('click', closeModal);
+    closeBtn.addEventListener('click', closeModal);
     document.addEventListener('keydown', function handler(e) {
         if (e.key === 'Escape') {
             closeModal();
@@ -773,12 +798,14 @@ function openResumePreview(data) {
 
     const contactParts = [];
     if (data.contact.email) contactParts.push(escapeHtml(data.contact.email));
-    if (data.contact.phone) contactParts.push(escapeHtml(data.contact.phone));
     if (data.contact.links) data.contact.links.forEach(l => contactParts.push(`<a href="${escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(l.label)}</a>`));
 
     const modal = document.createElement('div');
     modal.id = 'resumeModal';
     modal.className = 'resume-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Resume preview');
     modal.innerHTML = `
         <div class="resume-modal-backdrop"></div>
         <div class="resume-modal-content">
@@ -828,6 +855,8 @@ function openResumePreview(data) {
     document.body.appendChild(modal);
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => modal.classList.add('open'));
+
+    document.getElementById('resumeModalClose').focus();
 
     function closeModal() {
         modal.classList.remove('open');
@@ -927,6 +956,55 @@ function initSEO(data) {
 
     const el = document.getElementById('jsonLd');
     if (el) el.textContent = JSON.stringify(jsonLd);
+
+    if (data.testimonials && data.testimonials.length) {
+        const reviewLd = {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": data.name,
+            "url": url,
+            "hasCredential": data.certifications ? data.certifications.map(c => ({
+                "@type": "EducationalOccupationalCredential",
+                "name": c.name,
+                "credentialCategory": "Professional Certification",
+                "recognizedBy": { "@type": "Organization", "name": c.issuer || "" }
+            })) : [],
+            "knowsAbout": skillItems,
+            "review": data.testimonials.map(t => ({
+                "@type": "Review",
+                "author": {
+                    "@type": "Person",
+                    "name": t.name
+                },
+                "reviewBody": t.quote
+            }))
+        };
+
+        const reviewEl = document.createElement('script');
+        reviewEl.type = 'application/ld+json';
+        reviewEl.textContent = JSON.stringify(reviewLd);
+        document.head.appendChild(reviewEl);
+    }
+
+    const breadcrumbLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": url },
+            { "@type": "ListItem", "position": 2, "name": "About", "item": url + "#about" },
+            { "@type": "ListItem", "position": 3, "name": "Skills", "item": url + "#skills" },
+            { "@type": "ListItem", "position": 4, "name": "Experience", "item": url + "#experience" },
+            { "@type": "ListItem", "position": 5, "name": "Projects", "item": url + "#projects" },
+            { "@type": "ListItem", "position": 6, "name": "Certifications", "item": url + "#certifications" },
+            { "@type": "ListItem", "position": 7, "name": "Testimonials", "item": url + "#testimonials" },
+            { "@type": "ListItem", "position": 8, "name": "Contact", "item": url + "#contact" }
+        ]
+    };
+
+    const breadcrumbEl = document.createElement('script');
+    breadcrumbEl.type = 'application/ld+json';
+    breadcrumbEl.textContent = JSON.stringify(breadcrumbLd);
+    document.head.appendChild(breadcrumbEl);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

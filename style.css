@@ -188,6 +188,19 @@ ul {
     top: 0;
 }
 
+/* ========== Scroll Progress ========== */
+
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--color-accent);
+    width: 0;
+    z-index: 1001;
+    transition: width 0.1s linear;
+}
+
 /* ========== Navigation ========== */
 
 .nav {
@@ -322,11 +335,37 @@ ul {
     height: 18px;
 }
 
-.theme-toggle .icon-sun { display: none; }
-.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    position: absolute;
+}
 
-[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
-[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+.theme-toggle {
+    position: relative;
+    width: 32px;
+    height: 32px;
+}
+
+.theme-toggle .icon-sun {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+}
+
+.theme-toggle .icon-moon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
+}
 
 /* ========== Hero ========== */
 
@@ -792,6 +831,11 @@ ul {
     height: 180px;
     object-fit: cover;
     display: block;
+    transition: transform 0.4s ease;
+}
+
+.project-card:hover .project-thumb {
+    transform: scale(1.05);
 }
 
 .project-body {
@@ -1209,6 +1253,9 @@ ul {
 .form-status {
     font-size: 0.875rem;
     min-height: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .form-status.success {
@@ -1217,6 +1264,38 @@ ul {
 
 .form-status.error {
     color: #ef4444;
+}
+
+.checkmark {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.checkmark-circle {
+    stroke: #22c55e;
+    stroke-width: 2;
+    stroke-dasharray: 157;
+    stroke-dashoffset: 157;
+    animation: checkmarkCircle 0.6s ease forwards;
+}
+
+.checkmark-check {
+    stroke: #22c55e;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: checkmarkDraw 0.4s 0.4s ease forwards;
+}
+
+@keyframes checkmarkCircle {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes checkmarkDraw {
+    to { stroke-dashoffset: 0; }
 }
 
 .contact-info {
@@ -1971,6 +2050,71 @@ main.nav-transitioning {
     }
 }
 
+/* ========== Reduced Motion ========== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .fade-up {
+        opacity: 1;
+        transform: none;
+    }
+
+    .timeline-item {
+        opacity: 1;
+        transform: none;
+    }
+
+    .timeline-marker {
+        transform: scale(1);
+    }
+
+    .timeline::before {
+        transform: scaleY(1);
+    }
+
+    .hero-content {
+        transform: none !important;
+        opacity: 1 !important;
+    }
+
+    .project-card:hover,
+    .cert-card:hover,
+    .edu-card:hover,
+    .blog-card:hover,
+    .contact-item:hover {
+        transform: none;
+    }
+
+    .project-card:hover .project-thumb {
+        transform: none;
+    }
+
+    .skill-bar-fill {
+        transition: none;
+        width: var(--fill, 0%) !important;
+    }
+
+    .carousel-track {
+        transition: none;
+    }
+
+    .nav-logo.logo-spin {
+        animation: none;
+    }
+
+    .confetti {
+        display: none;
+    }
+}
+
 /* ========== Print ========== */
 
 @media print {
@@ -1989,6 +2133,7 @@ main.nav-transitioning {
     }
 
     .preloader,
+    .scroll-progress,
     .nav,
     .skip-link,
     .back-to-top,
