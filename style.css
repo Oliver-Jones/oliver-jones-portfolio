@@ -1076,11 +1076,26 @@ ul {
     border-color: var(--color-accent);
 }
 
+.blog-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
 .blog-card .blog-date {
     font-size: 0.8125rem;
     color: var(--color-accent);
     font-weight: 500;
-    margin-bottom: 8px;
+}
+
+.blog-read-time {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    padding: 2px 8px;
+    background: var(--color-tag-bg);
+    border-radius: 100px;
 }
 
 .blog-card h3 {

@@ -312,7 +312,10 @@ function renderBlog(data) {
         html += '<div class="blog-grid">';
         html += data.blog.posts.map(post => `
             <a href="${escapeHtml(post.url)}" target="_blank" rel="noopener noreferrer" class="blog-card">
-                <span class="blog-date">${escapeHtml(post.date)}</span>
+                <div class="blog-meta">
+                    <span class="blog-date">${escapeHtml(post.date)}</span>
+                    ${post.readTime ? `<span class="blog-read-time">${post.readTime} min read</span>` : ''}
+                </div>
                 <h3>${escapeHtml(post.title)}</h3>
                 <p>${escapeHtml(post.summary)}</p>
                 <span class="blog-read-more">Read more &rarr;</span>
