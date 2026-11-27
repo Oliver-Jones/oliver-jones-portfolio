@@ -1164,7 +1164,6 @@ ul {
 .resume-modal-content {
     position: relative;
     width: 100%;
-    max-width: 800px;
     max-height: 100vh;
     overflow-y: auto;
     padding: 16px;
@@ -1181,6 +1180,9 @@ ul {
     z-index: 2;
     background: transparent;
     padding: 4px 0;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .resume-download-btn {
@@ -1215,6 +1217,8 @@ ul {
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
     font-size: 0.9375rem;
     line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .resume-header {
