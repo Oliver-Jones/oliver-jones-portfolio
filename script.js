@@ -458,22 +458,31 @@ function initAnimations() {
 
     const timeline = document.querySelector('.timeline');
     if (timeline) {
-        const timelineItems = timeline.querySelectorAll('.timeline-item');
         const timelineObserver = new IntersectionObserver(
             entries => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         timeline.classList.add('animated');
-                        timelineItems.forEach((item, i) => {
-                            setTimeout(() => item.classList.add('visible'), i * 200);
-                        });
                         timelineObserver.unobserve(entry.target);
                     }
                 });
             },
-            { threshold: 0.1 }
+            { threshold: 0.05 }
         );
         timelineObserver.observe(timeline);
+
+        const itemObserver = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        itemObserver.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.2, rootMargin: '0px 0px -50px 0px' }
+        );
+        timeline.querySelectorAll('.timeline-item').forEach(item => itemObserver.observe(item));
     }
 }
 
