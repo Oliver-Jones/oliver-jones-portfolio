@@ -379,6 +379,22 @@ function initNav() {
         });
     }
 
+    const logo = document.querySelector('.nav-logo');
+    let logoClicks = 0;
+    let logoTimer;
+    logo.addEventListener('click', (e) => {
+        logoClicks++;
+        clearTimeout(logoTimer);
+        logoTimer = setTimeout(() => { logoClicks = 0; }, 800);
+        if (logoClicks >= 5) {
+            logoClicks = 0;
+            e.preventDefault();
+            logo.classList.add('logo-spin');
+            logo.addEventListener('animationend', () => logo.classList.remove('logo-spin'), { once: true });
+            triggerEasterEgg();
+        }
+    });
+
     navToggle.addEventListener('click', () => {
         navToggle.classList.toggle('open');
         navLinks.classList.toggle('open');
@@ -716,6 +732,47 @@ function openResumePreview(data) {
     });
 }
 
+function initKonamiCode() {
+    const code = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    let pos = 0;
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === code[pos]) {
+            pos++;
+            if (pos === code.length) {
+                pos = 0;
+                triggerEasterEgg();
+            }
+        } else {
+            pos = 0;
+        }
+    });
+}
+
+function triggerEasterEgg() {
+    const colors = ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#1d4ed8'];
+    for (let i = 0; i < 120; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        confetti.style.animationDelay = (Math.random() * 1.5) + 's';
+        document.body.appendChild(confetti);
+        confetti.addEventListener('animationend', () => confetti.remove());
+    }
+
+    const msg = document.createElement('div');
+    msg.className = 'easter-egg-msg';
+    msg.innerHTML = '<span>You found the secret! You must be a developer too.</span>';
+    document.body.appendChild(msg);
+    requestAnimationFrame(() => msg.classList.add('visible'));
+    setTimeout(() => {
+        msg.classList.remove('visible');
+        msg.addEventListener('transitionend', () => msg.remove(), { once: true });
+    }, 4000);
+}
+
 function initSEO(data) {
     const url = data.siteUrl || '';
 
@@ -773,6 +830,13 @@ document.addEventListener('DOMContentLoaded', () => {
     initNav();
     initAnimations();
     initContactForm();
+    initKonamiCode();
+
+    console.log('%c  ___  _\n / _ \\| |\n| | | | |\n| |_| | |\n \\___/|_|', 'color: #2563eb; font-size: 14px; font-weight: bold;');
+    console.log('%cHey, curious developer! 👀', 'color: #2563eb; font-size: 18px; font-weight: bold; margin-top: 8px;');
+    console.log('%cLike what you see? Let\'s connect → linkedin.com/in/oliver-jones-rajkumar', 'color: #64748b; font-size: 12px;');
+    console.log('%cP.S. Try the Konami Code... ↑↑↓↓←→←→BA', 'color: #64748b; font-size: 11px; font-style: italic;');
+    console.log('%cP.S. Also try clicking the logo 5 times quickly... OJ', 'color: #64748b; font-size: 11px; font-style: italic;');
 
     const preloader = document.getElementById('preloader');
     if (preloader) {
