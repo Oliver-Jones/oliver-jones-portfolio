@@ -29,9 +29,9 @@ function renderHero(data) {
             <div class="hero-actions fade-up">
                 <a href="#contact" class="btn btn-primary">Get in Touch</a>
                 <a href="#projects" class="btn btn-outline">View Projects</a>
-                <button onclick="generateResume(PORTFOLIO_DATA)" class="btn btn-outline">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Download Resume
+                <button onclick="openResumePreview(PORTFOLIO_DATA)" class="btn btn-outline">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px"><path d="M15 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    View Resume
                 </button>
             </div>
         </div>
@@ -544,6 +544,131 @@ function initTypingEffect(text) {
     }
 
     setTimeout(type, 500);
+}
+
+function openResumePreview(data) {
+    if (document.getElementById('resumeModal')) return;
+
+    const skills = data.skills.map(g => {
+        const items = g.items.map(item => typeof item === 'string' ? item : item.name);
+        return `<div class="resume-skills-group">
+            <h4>${escapeHtml(g.category)}</h4>
+            <p>${items.map(i => escapeHtml(i)).join(' &bull; ')}</p>
+        </div>`;
+    }).join('');
+
+    const experience = data.experience.map(job => `
+        <div class="resume-entry">
+            <div class="resume-entry-header">
+                <strong>${escapeHtml(job.role)}</strong>
+                <span>${escapeHtml(job.date)}</span>
+            </div>
+            <p class="resume-entry-sub">${escapeHtml(job.company)}</p>
+            <ul>${job.points.map(p => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        </div>
+    `).join('');
+
+    const projects = data.projects.map(proj => `
+        <div class="resume-entry">
+            <div class="resume-entry-header">
+                <strong>${escapeHtml(proj.name)}</strong>
+                <span>${escapeHtml(proj.date)}</span>
+            </div>
+            <p>${escapeHtml(proj.description)}</p>
+            <p class="resume-tags">${proj.tags.map(t => escapeHtml(t)).join(' &bull; ')}</p>
+        </div>
+    `).join('');
+
+    const certs = data.certifications.map(c =>
+        `<li><strong>${escapeHtml(c.name)}</strong> &mdash; ${escapeHtml(c.issuer || '')} ${escapeHtml(c.date)}</li>`
+    ).join('');
+
+    const edu = data.education.map(e => `
+        <div class="resume-entry">
+            <div class="resume-entry-header">
+                <strong>${escapeHtml(e.degree)}</strong>
+                <span>${escapeHtml(e.period)}</span>
+            </div>
+            <p class="resume-entry-sub">${escapeHtml(e.school)} &bull; ${escapeHtml(e.grade)}</p>
+        </div>
+    `).join('');
+
+    const contactParts = [];
+    if (data.contact.email) contactParts.push(escapeHtml(data.contact.email));
+    if (data.contact.phone) contactParts.push(escapeHtml(data.contact.phone));
+    if (data.contact.links) data.contact.links.forEach(l => contactParts.push(`<a href="${escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(l.label)}</a>`));
+
+    const modal = document.createElement('div');
+    modal.id = 'resumeModal';
+    modal.className = 'resume-modal';
+    modal.innerHTML = `
+        <div class="resume-modal-backdrop"></div>
+        <div class="resume-modal-content">
+            <div class="resume-modal-toolbar">
+                <button class="btn btn-primary resume-download-btn" id="resumeDownloadBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download PDF
+                </button>
+                <button class="resume-modal-close" id="resumeModalClose" aria-label="Close preview">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="resume-paper">
+                <header class="resume-header">
+                    <h1>${escapeHtml(data.name)}</h1>
+                    <p class="resume-title-line">${escapeHtml(data.title)}</p>
+                    <p class="resume-contact-line">${contactParts.join(' &nbsp;|&nbsp; ')}</p>
+                </header>
+                <section class="resume-section">
+                    <h2>Summary</h2>
+                    ${data.about.map(p => `<p>${escapeHtml(p)}</p>`).join('')}
+                </section>
+                <section class="resume-section">
+                    <h2>Skills</h2>
+                    <div class="resume-skills">${skills}</div>
+                </section>
+                <section class="resume-section">
+                    <h2>Experience</h2>
+                    ${experience}
+                </section>
+                <section class="resume-section">
+                    <h2>Projects</h2>
+                    ${projects}
+                </section>
+                <section class="resume-section">
+                    <h2>Certifications</h2>
+                    <ul class="resume-cert-list">${certs}</ul>
+                </section>
+                <section class="resume-section">
+                    <h2>Education</h2>
+                    ${edu}
+                </section>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => modal.classList.add('open'));
+
+    function closeModal() {
+        modal.classList.remove('open');
+        modal.addEventListener('transitionend', () => {
+            modal.remove();
+            document.body.style.overflow = '';
+        }, { once: true });
+    }
+
+    modal.querySelector('.resume-modal-backdrop').addEventListener('click', closeModal);
+    document.getElementById('resumeModalClose').addEventListener('click', closeModal);
+    document.getElementById('resumeDownloadBtn').addEventListener('click', () => generateResume(data));
+
+    document.addEventListener('keydown', function handler(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+            document.removeEventListener('keydown', handler);
+        }
+    });
 }
 
 function initSEO(data) {
