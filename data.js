@@ -132,24 +132,28 @@ const PORTFOLIO_DATA = {
       "name": "Industrial Commission of Arizona (ICA)",
       "date": "Mar 2026 — Present",
       "description": "Ongoing Salesforce Service Cloud and Public Sector project for the Industrial Commission of Arizona.",
+      "image": "resources/project-ica.jpg",
       "tags": ["Service Cloud", "Public Sector"]
     },
     {
       "name": "Avere - California Department of Motor Vehicles (DMV)",
       "date": "Mar 2026 — Jun 2026",
       "description": "E-Recruitment, Accounts Receivable and Telework Agreement Processes using ServiceNow's Human Resources Service Delivery (HRSD).",
+      "image": "resources/project-avere-dmv.jpg",
       "tags": ["ServiceNow", "ServiceNow Administration", "HRSD"]
     },
     {
       "name": "WillScot - Agentforce Chat Agent",
       "date": "Mar 2025 — May 2026",
       "description": "Salesforce Chat Agent using Agentforce Customer Service Agent.",
+      "image": "resources/project-willscot.jpg",
       "tags": ["AgentForce", "Lightning Types"]
     },
     {
       "name": "Arizona Supreme Court - Alternative Business Structure",
       "date": "Jun 2025 — Mar 2026",
       "description": "Led the development and customization of Salesforce Public Sector Solutions (PSS) for the Arizona Supreme Court's Alternative Business Structure Initial and Renewal Applications.",
+      "image": "resources/project-az-courts.jpg",
       "tags": ["Public Sector", "OmniStudio"]
     },
     {
@@ -162,6 +166,7 @@ const PORTFOLIO_DATA = {
       "name": "Wyoming Professional Teaching Standards Board (PTSB)",
       "date": "Jun 2024 — May 2025",
       "description": "An independent professional licensing board that governs teacher licensure in the state of Wyoming. Built with Salesforce Public Sector Solutions, OmniScripts, FlexCards, DataRaptors, and Transafe payment gateway integration.",
+      "image": "resources/project-wyoming-ptsb.jpg",
       "tags": ["Public Sector", "Licensing and Permit", "OmniStudio"]
     },
     {
@@ -192,6 +197,7 @@ const PORTFOLIO_DATA = {
       "name": "Republic Services Group (RSG)",
       "date": "Feb 2017 — Aug 2017",
       "description": "Republic Services is a leading provider of environmental services in Arizona, focusing on waste disposal and recycling, serving millions of residents and businesses.",
+      "image": "resources/project-republic-services.jpg",
       "tags": ["Case Management", "Service Cloud"]
     }
   ],

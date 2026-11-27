@@ -109,11 +109,14 @@ function renderProjects(data) {
 
         grid.innerHTML = filtered.map(proj => `
             <div class="project-card fade-up">
-                <div class="project-date">${escapeHtml(proj.date)}</div>
-                <h3>${escapeHtml(proj.name)}</h3>
-                <p>${escapeHtml(proj.description)}</p>
-                <div class="project-tags">
-                    ${proj.tags.map(t => `<span class="${t === filter ? 'active-tag' : ''}">${escapeHtml(t)}</span>`).join('')}
+                ${proj.image ? `<img class="project-thumb" src="${escapeHtml(proj.image)}" alt="${escapeHtml(proj.name)}" loading="lazy" decoding="async">` : ''}
+                <div class="project-body">
+                    <div class="project-date">${escapeHtml(proj.date)}</div>
+                    <h3>${escapeHtml(proj.name)}</h3>
+                    <p>${escapeHtml(proj.description)}</p>
+                    <div class="project-tags">
+                        ${proj.tags.map(t => `<span class="${t === filter ? 'active-tag' : ''}">${escapeHtml(t)}</span>`).join('')}
+                    </div>
                 </div>
             </div>
         `).join('');
